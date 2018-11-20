@@ -1,0 +1,31 @@
+<div class="full_page">
+  <div class="content">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12 col-md-4 ml-auto mr-auto loginForm">
+            <h3>LOGIN</h3>
+            <hr>
+            <form [formGroup]="loginForm">
+              <div class="form-group login-div">
+                <label>Email address</label>
+                <input type="email" formControlName="email" class="form-control input_rounded" required>
+              </div>
+              <div class="form-group login-div">
+                <label>Password</label>
+                <input type="password" class="form-control input_rounded" formControlName="password" required>
+              </div>
+              <div class="login-div">
+                <button type="submit" (click)="login(user)" class="btn btn-default btn-rounded login-btn">Login</button>
+              </div>
+            </form>
+            <hr>
+            <div class="googleLogin">
+              <button class="btn btn-default googleLoginBtn" (click)="auth.googleLogin()">Sign in with Google</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

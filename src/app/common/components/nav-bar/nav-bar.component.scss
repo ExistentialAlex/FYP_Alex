@@ -1,0 +1,23 @@
+.login_div {
+    text-align: center;
+}
+
+.my_nav {
+    position: fixed !important;
+    left:0;
+    top:0;
+    width:100%;
+    z-index:10;
+    background: white;
+}
+
+.user-icon {
+    max-width: 2.5em;
+    border-radius: 2.5em;
+    border:0;
+    padding:0;
+}
+
+.user-dropdown {
+    padding: 0;
+}

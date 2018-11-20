@@ -1,0 +1,62 @@
+<div
+  class="dropzone"
+  appDragndrop
+  (hovered)="toggleHover($event)"
+  (dropped)="fs.startFileUpload($event)"
+  [class.hovering]="isHovering"
+>
+  <h3>Upload a Document</h3>
+  <div class="row">
+    <div class="col-12">
+      <p><b>Drag Files Here</b></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <input
+        class="file-upload"
+        id="file-upload"
+        type="file"
+        (change)="fs.startFileUpload($event.target.files)"
+      />
+      <label class=" btn btn-rounded" for="file-upload">Choose a file...</label>
+    </div>
+  </div>
+</div>
+<div class="" *ngIf="(fs.percentage | async) as pct">
+  <div class="progress">
+    <div
+      class="progress-bar"
+      role="progressbar"
+      aria-valuenow="pct"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [style.width]="pct + '%'"
+    >
+    {{ pct | number }}%
+    </div>
+  </div>
+</div>
+<div class="" *ngIf="(fs.snapshot | async) as snap">
+  <button
+    (click)="fs.task.pause()"
+    class="btn btn-rounded"
+    [disabled]="!isActive(snap)"
+  >
+    Pause
+  </button>
+  <button
+    (click)="fs.task.cancel()"
+    class="btn btn-rounded"
+    [disabled]="!isActive(snap)"
+  >
+    Cancel
+  </button>
+  <button
+    (click)="fs.task.resume()"
+    class="btn btn-rounded"
+    [disabled]="!(snap?.state === 'paused')"
+  >
+    Resume
+  </button>
+</div>

@@ -1,0 +1,21 @@
+@import "../../../../sass/variables";
+
+.map-section {
+    background: url("/assets/imgs/city_placeholder.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}
+
+.landing-section {
+    min-height: 100vh;
+    padding-top: 1em;
+}
+
+.landing-area {
+    padding: 0;
+}
+
+.register-col {
+    padding-top: 15px;
+}

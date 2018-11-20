@@ -1,0 +1,18 @@
+@import "../../../../sass/variables";
+
+.googleLogin {
+    margin-top: 1em;
+}
+
+.googleLoginBtn {
+    background-color: $primary-color;
+    color: white;
+}
+
+.googleLoginBtn:hover {
+    background-color: $dark-color;
+}
+
+.registerForm {
+    margin-top: 1em;
+}

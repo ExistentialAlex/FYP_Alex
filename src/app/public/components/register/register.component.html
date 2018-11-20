@@ -1,0 +1,46 @@
+<ng-container *ngIf="(auth.user | async) || {} as user">
+  <h3 class="">REGISTER</h3>
+  <hr>
+  <form class="registerForm" [formGroup]="registerForm" *ngIf="!user.uid">
+    <div class="form-group login-div">
+      <label for="email">Email address</label>
+      <input type="email" formControlName="email" class="form-control input_rounded">
+    </div>
+    <div *ngIf="email.invalid && email.dirty">
+      Your email doesn't look quite right...
+    </div>
+    <div class="form-group login-div">
+      <label for="password">Password</label>
+      <input type="password" class="form-control input_rounded" formControlName="password" required>
+    </div>
+    <div *ngIf="password.invalid && password.touched">
+      Passwords must be between 6 and 25 characters long and contain at least one number.
+    </div>
+    <div class="login-div">
+      <button type="button" (click)="signup()" class="btn btn-default btn-rounded login-btn" [disabled]="!registerForm.valid">Submit</button>
+    </div>
+  </form>
+
+  <form class="registerForm" [formGroup]="detailsForm" *ngIf="user.uid && !user.first_name && !user.last_name">
+    <div class="form-group login-div">
+      <label>First Name</label>
+      <input type="text" class="form-control input_rounded" formControlName="first_name" required>
+    </div>
+    <div class="form-group login-div">
+      <label>Last Name</label>
+      <input type="text" class="form-control input_rounded" formControlName="last_name" required>
+    </div>
+    <div class="login-div">
+      <button (click)="setDetails(user)" type="button" class="btn btn-default btn-rounded login-btn" [disabled]="!detailsForm.valid">Submit</button>
+    </div>
+  </form>
+
+  <p class="registerForm" *ngIf="user.uid && user.first_name && user.last_name">Thank you for registering</p>
+
+  <hr>
+
+  <div class="googleLogin">
+    <button class="btn btn-default googleLoginBtn" (click)="auth.googleLogin()">Sign in with Google</button>
+  </div>
+
+</ng-container>

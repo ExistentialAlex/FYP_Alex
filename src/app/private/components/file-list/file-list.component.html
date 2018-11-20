@@ -1,0 +1,40 @@
+<div class="file-list">
+  <div class="file-row" *ngFor="let file of fileList">
+    <div class="row align-items-center">
+      <div class="col-2 file-extension">
+        {{ file.file_extension }}
+      </div>
+      <div class="col-4 file-name">
+        {{ file.file_name }}
+      </div>
+      <div class="col-2 file-size">
+        {{ file.size | fileSize }}
+      </div>
+      <div class="col-2">
+        <div
+          *ngIf="file.processed == 0; then: notProcessed; else: processed"
+        ></div>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-rounded" routerLink="/results">Details</button>
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>
+
+<ng-template #processed>
+  <div class="circle-loader load-complete">
+    <div class="checkmark draw"></div>
+  </div>
+</ng-template>
+
+<ng-template #notProcessed>
+  <div class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+</ng-template>

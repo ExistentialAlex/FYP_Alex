@@ -1,0 +1,92 @@
+@import "./variables";
+
+@font-face {
+    font-family: roboto;
+    src: url("/assets/fonts/Roboto-Thin.ttf");
+    font-weight: 100;
+}
+
+ @font-face {
+    font-family: roboto;
+    src: url("/assets/fonts/Roboto-Light.ttf");
+    font-weight: 300;
+}
+
+ @font-face {
+    font-family: roboto;
+    src: url("/assets/fonts/Roboto-Regular.ttf");
+    font-weight: 400;
+}
+
+ @font-face {
+    font-family: roboto;
+    src: url("/assets/fonts/Roboto-Bold.ttf");
+    font-weight: bold;
+}
+
+.full_page {
+    min-height: 100vh;
+    background: white;
+    position: relative;
+    z-index:0;
+    text-align: center;
+    padding-top: 56px;
+}
+
+html, body {
+    font-family: roboto !important;
+    font-weight: 300;
+    background: #ffffff;
+}
+
+.btn {
+    box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
+    background-color: $primary-color;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn-rounded {
+    border-radius: 2em;
+}
+
+
+.input_rounded {
+    border-radius: 2em;
+    border-style: solid;
+    border-color: $primary-color;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+}
+
+.login-btn {
+    color: white;
+    background-color: $primary-color;
+    border-color: $primary-color;
+    opacity:1;
+}
+
+.login-btn:hover {
+    background-color: $dark-color;
+    border-color: $dark-color;
+}
+
+.row {
+    margin: 0 !important;
+}
+
+::-webkit-input-placeholder {
+    text-align: center;
+ }
+ 
+ :-moz-placeholder { /* Firefox 18- */
+    text-align: center;  
+ }
+ 
+ ::-moz-placeholder {  /* Firefox 19+ */
+    text-align: center;  
+ }
+ 
+ :-ms-input-placeholder {  
+    text-align: center; 
+ }
