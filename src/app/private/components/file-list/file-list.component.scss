@@ -4,6 +4,10 @@
   padding-top: 1em;
 }
 
+.word-icon, .pdf-icon, .txt-icon {
+  color: $primary-color;
+}
+
 .file-name, .file-extension, .file-size {
   font-size: 1em;
   font-weight: 400;

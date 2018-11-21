@@ -3,7 +3,7 @@ import {
   AngularFireUploadTask,
   AngularFireStorage
 } from "@angular/fire/storage";
-import { Observable, ObservableLike, Subject, Subscription } from "rxjs";
+import { Observable, ObservableLike, Subject, Subscription, of } from "rxjs";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { AuthService } from "./auth.service";
 import { finalize, tap, switchMap } from "rxjs/operators";
@@ -12,7 +12,6 @@ import { finalize, tap, switchMap } from "rxjs/operators";
   providedIn: "root"
 })
 export class FileService {
-
   // Main task
   task: AngularFireUploadTask;
 
@@ -32,8 +31,10 @@ export class FileService {
     private storage: AngularFireStorage,
     private db: AngularFirestore,
     private auth: AuthService
-  ) {
-    this.fileQuery = this.auth
+  ) {}
+
+  getUserFiles(): Observable<{}[]> {
+    return this.auth
       .getUserData()
       .pipe(
         switchMap(user =>
@@ -44,9 +45,10 @@ export class FileService {
             .valueChanges()
         )
       );
-    this.fileQuery.subscribe(queriedItems => {
-      this.fileList = queriedItems;
-    });
+  }
+
+  getFile(fid): Observable<{}> {
+    return this.db.doc(`FYP_FILES/${fid}`).valueChanges();
   }
 
   startFileUpload(event: FileList) {

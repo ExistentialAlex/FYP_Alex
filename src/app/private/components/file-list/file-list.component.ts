@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FileService } from 'src/app/common/services/file.service';
+import { faFileWord, faFile, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, Observable } from 'rxjs';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-file-list',
@@ -9,15 +11,23 @@ import { Subscription, Observable } from 'rxjs';
 })
 export class FileListComponent implements OnInit {
 
-  fileList:Observable<any>;
+  fileList: any;
+
+  faFileWord = faFileWord;
+  faFile = faFile;
+  faFilePdf = faFilePdf;
 
   constructor(public fs: FileService) {
-    this.fs.fileQuery.subscribe(queriedItems => {
-      this.fileList = queriedItems;
-    })
   }
 
   ngOnInit() {
+    this.fileList = this.getUsersFiles();
+  }
+
+  getUsersFiles() {
+    this.fs.getUserFiles().subscribe(userFiles => {
+      this.fileList = userFiles;
+    })
   }
 
 }

@@ -2,21 +2,25 @@
   <div class="file-row" *ngFor="let file of fileList">
     <div class="row align-items-center">
       <div class="col-2 file-extension">
-        {{ file.file_extension }}
+        <div *ngIf="file.file_extension == 'docx'; then word"></div>
+        <div *ngIf="file.file_extension == 'doc'; then word"></div>
+        <div *ngIf="file.file_extension == 'pdf'; then pdf"></div>
+        <div *ngIf="file.file_extension == 'txt'; then txt"></div>
       </div>
-      <div class="col-4 file-name">
-        {{ file.file_name }}
-      </div>
-      <div class="col-2 file-size">
-        {{ file.size | fileSize }}
-      </div>
+      <div class="col-4 file-name">{{ file.file_name }}</div>
+      <div class="col-2 file-size">{{ file.size | fileSize }}</div>
       <div class="col-2">
         <div
           *ngIf="file.processed == 0; then: notProcessed; else: processed"
         ></div>
       </div>
       <div class="col-2">
-        <button class="btn btn-rounded" routerLink="/results">Details</button>
+        <button
+          class="btn btn-rounded"
+          routerLink="/private/fileDetails/{{file.fid}}"
+        >
+          Details
+        </button>
       </div>
     </div>
     <hr />
@@ -36,5 +40,23 @@
     <div class="rect3"></div>
     <div class="rect4"></div>
     <div class="rect5"></div>
+  </div>
+</ng-template>
+
+<ng-template #word>
+  <div style="text-align: center">
+    <fa-icon class="word-icon" [icon]="faFileWord" size="2x"></fa-icon>
+  </div>
+</ng-template>
+
+<ng-template #pdf>
+  <div style="text-align: center">
+    <fa-icon class="word-icon" [icon]="faFilePdf" size="2x"></fa-icon>
+  </div>
+</ng-template>
+
+<ng-template #txt>
+  <div style="text-align: center">
+    <fa-icon class="word-icon" [icon]="faFile" size="2x"></fa-icon>
   </div>
 </ng-template>

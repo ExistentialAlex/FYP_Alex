@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CoreModule } from './common/modules/core/core.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire';
@@ -14,8 +15,8 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { NavBarComponent } from './common/components/nav-bar/nav-bar.component';
 import { AuthService } from './common/services/auth.service';
 import { NotifyService } from './common/services/notify.service';
-import { DragndropDirective } from './common/directives/dragndrop.directive';
-import { FileSizePipe } from './common/pipes/file-size.pipe';
+
+
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { FileSizePipe } from './common/pipes/file-size.pipe';
     FormsModule,
     RouterModule,
     RouterModule.forRoot(routes),
-    CoreModule
+    CoreModule,
+    FontAwesomeModule
   ],
   providers: [
     AuthService,

@@ -14,6 +14,8 @@ import { FileSizePipe } from '../common/pipes/file-size.pipe';
 import { DragndropDirective } from '../common/directives/dragndrop.directive';
 import { FilePageComponent } from './pages/file-page/file-page.component';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 const routes: Route[] = [
   {
     path: 'map',
@@ -24,7 +26,7 @@ const routes: Route[] = [
     component: ProfilePageComponent
   },
   {
-    path: 'fileDetails',
+    path: 'fileDetails/:id',
     component: FilePageComponent
   }
 ]
@@ -34,10 +36,12 @@ const routes: Route[] = [
     CommonModule,
     RouterModule,
     RouterModule.forChild(routes),
+    FontAwesomeModule
   ],
   declarations: [
     MapPageComponent,
     ProfilePageComponent,
+    FilePageComponent,
     UserDetailsComponent,
     FileUploadComponent,
     FileListComponent,
