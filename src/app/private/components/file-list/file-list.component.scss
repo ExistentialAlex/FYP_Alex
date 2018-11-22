@@ -8,10 +8,17 @@
   color: $primary-color;
 }
 
+.list-header {
+  font-size: 1em;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
 .file-name, .file-extension, .file-size {
   font-size: 1em;
   font-weight: 400;
-  vertical-align: middle
+  vertical-align: middle;
+  overflow: hidden;
 }
 
 .spinner {

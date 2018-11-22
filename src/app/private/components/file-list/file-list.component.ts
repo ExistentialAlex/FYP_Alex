@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FileService } from 'src/app/common/services/file.service';
-import { faFileWord, faFile, faFilePdf } from '@fortawesome/free-solid-svg-icons';
-import { Subscription, Observable } from 'rxjs';
-import { TouchSequence } from 'selenium-webdriver';
+import { faFileWord, faFile, faFilePdf, faRedo} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-file-list',
@@ -13,6 +11,7 @@ export class FileListComponent implements OnInit {
 
   fileList: any;
 
+  faRedo = faRedo;
   faFileWord = faFileWord;
   faFile = faFile;
   faFilePdf = faFilePdf;
@@ -29,5 +28,4 @@ export class FileListComponent implements OnInit {
       this.fileList = userFiles;
     })
   }
-
 }

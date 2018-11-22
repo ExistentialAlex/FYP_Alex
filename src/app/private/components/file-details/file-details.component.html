@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col-8 mx-auto file-details-card">
+    <div class="row">
+      <div class="col-12 file-details">
+        <div class="row">
+          <div class="col-4 file-icon">
+            <div *ngIf="file.file_extension == 'docx'; then: word"></div>
+            <div *ngIf="file.file_extension == 'doc'; then: word"></div>
+            <div *ngIf="file.file_extension == 'pdf'; then: pdf"></div>
+            <div *ngIf="file.file_extension == 'txt'; then: txt"></div>
+          </div>
+          <div class="col-8 file-details-text">
+            <div class="row">
+              <div class="col-12">{{ file.file_name }}</div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-4">{{ file.size | fileSize }}</div>
+              <div class="col-8">{{ file.file_extension }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h1>Cities</h1>
+        <div *ngFor="let city of file.Cities">
+          <div class="row">
+            <div class="col-12">
+              {{city.city_name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-12">
+        <h1>Towns</h1>
+        <div *ngFor="let town of file.Towns">
+          <div class="row">
+            <div class="col-12">
+              {{town.town_name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #word>
+  <div class="icon-container">
+    <fa-icon class="word-icon" [icon]="faFileWord" size="6x"></fa-icon>
+  </div>
+</ng-template>
+
+<ng-template #pdf>
+  <div class="icon-container">
+    <fa-icon class="pdf-icon" [icon]="faFilePdf" size="6x"></fa-icon>
+  </div>
+</ng-template>
+
+<ng-template #txt>
+  <div class="icon-container">
+    <fa-icon class="txt-icon" [icon]="faFile" size="6x"></fa-icon>
+  </div>
+</ng-template>

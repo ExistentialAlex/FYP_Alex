@@ -20,6 +20,7 @@
         (change)="fs.startFileUpload($event.target.files)"
       />
       <label class=" btn btn-rounded" for="file-upload">Choose a file...</label>
+      <p>{{fs.uploadError}}</p>
     </div>
   </div>
 </div>
@@ -36,27 +37,4 @@
     {{ pct | number }}%
     </div>
   </div>
-</div>
-<div class="" *ngIf="(fs.snapshot | async) as snap">
-  <button
-    (click)="fs.task.pause()"
-    class="btn btn-rounded"
-    [disabled]="!isActive(snap)"
-  >
-    Pause
-  </button>
-  <button
-    (click)="fs.task.cancel()"
-    class="btn btn-rounded"
-    [disabled]="!isActive(snap)"
-  >
-    Cancel
-  </button>
-  <button
-    (click)="fs.task.resume()"
-    class="btn btn-rounded"
-    [disabled]="!(snap?.state === 'paused')"
-  >
-    Resume
-  </button>
 </div>

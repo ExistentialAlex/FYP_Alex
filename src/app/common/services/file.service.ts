@@ -7,6 +7,7 @@ import { Observable, ObservableLike, Subject, Subscription, of } from "rxjs";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { AuthService } from "./auth.service";
 import { finalize, tap, switchMap } from "rxjs/operators";
+import { NotifyService } from "./notify.service";
 
 @Injectable({
   providedIn: "root"
@@ -27,10 +28,13 @@ export class FileService {
 
   fileList: Array<any>;
 
+  uploadError: string;
+
   constructor(
     private storage: AngularFireStorage,
     private db: AngularFirestore,
-    private auth: AuthService
+    private auth: AuthService,
+    private notify: NotifyService
   ) {}
 
   getUserFiles(): Observable<{}[]> {
@@ -51,21 +55,72 @@ export class FileService {
     return this.db.doc(`FYP_FILES/${fid}`).valueChanges();
   }
 
+  getFileContexts(fid) {
+    return this.db
+      .collection("FYP_CONTEXTS", ref => ref.where("fid", "==", `${fid}`))
+      .valueChanges();
+  }
+
+  getContextLocation(context) {
+    return this.db.doc(`FYP_LOCATIONS/${context.lid}`).valueChanges();
+  }
+
+  deleteFile(fid, ext): void {
+    const userID = this.auth.getUserID();
+    this.db
+      .doc(`FYP_FILES/${fid}`)
+      .delete()
+      .then(() => {
+        var fileName = fid + "." + ext;
+        this.storage.storage
+          .refFromURL(`FYP_FILES/${userID}/${fileName}`)
+          .delete()
+          .then(() => {
+            console.log("File Deleted Successfully");
+          })
+          .catch(error => this.handleError(error));
+      })
+      .catch(error => this.handleError(error));
+  }
+
+  deleteContext(cid): void {
+    this.db
+      .doc(`FYP_CONTEXT/${cid}`)
+      .delete()
+      .then(() => {
+        console.log("Context Deleted Successfully");
+      })
+      .catch(error => this.handleError(error));
+  }
+
+  deleteAllContexts(cid: string[]): void {
+    for (var i=0; i < cid.length; i++) {
+      this.deleteContext(cid[i])
+    }
+  }
+
   startFileUpload(event: FileList) {
     for (var i = 0; i < event.item.length; i++) {
       const userID = this.auth.getUserID();
 
-      console.log(event.item.length);
-
       // The File object
       var file = event.item(i);
+      //File Extension
+      var fileExtension = file.name.split(".")[1];
 
       // Client-side validation example
-      if (file.name.split(".")[1] !== ("docx" || "doc" || "pdf" || "txt")) {
-        console.error("unsupported file type :( ");
-        return;
+      if (fileExtension !== "docx") {
+        if (fileExtension !== "doc") {
+          if (fileExtension !== "pdf") {
+            if (fileExtension !== "txt") {
+              console.error("unsupported file type :( ");
+              this.uploadError =
+                "Unsupported File Type, please select a Word Document, PDF or Text File.";
+              return;
+            }
+          }
+        }
       }
-
       var file_upload_name = `${new Date().getTime()}_${file.name}`;
 
       // The storage path
@@ -81,34 +136,17 @@ export class FileService {
       this.percentage = this.task.percentageChanges();
       this.snapshot = this.task.snapshotChanges();
 
-      // The file's download URL
-      this.task
-        .snapshotChanges()
-        .pipe(
-          finalize(
-            () => (this.downloadURL = this.storage.ref(path).getDownloadURL())
-          )
-        )
-        .subscribe();
-
-      this.snapshot = this.task.snapshotChanges().pipe(
-        tap(snap => {
-          if (snap.bytesTransferred === snap.totalBytes) {
-            // Update firestore on completion
-            file_upload_name = file_upload_name.split(".")[0];
-            this.db.doc(`FYP_FILES/${file_upload_name}`).set({
-              uid: userID,
-              fid: file_upload_name,
-              file_name: file.name.split(".")[0],
-              file_extension: file.name.split(".")[1],
-              file_type: file.type,
-              path,
-              size: snap.totalBytes,
-              processed: 0
-            });
-          }
-        })
-      );
+      file_upload_name = file_upload_name.split(".")[0];
+      this.db.doc(`FYP_FILES/${file_upload_name}`).set({
+        uid: userID,
+        fid: file_upload_name,
+        file_name: file.name.split(".")[0],
+        file_extension: file.name.split(".")[1],
+        file_type: file.type,
+        path,
+        size: file.size,
+        processed: 0
+      });
     }
   }
 
@@ -118,5 +156,10 @@ export class FileService {
       snapshot.state === "running" &&
       snapshot.bytesTransferred < snapshot.totalBytes
     );
+  }
+
+  private handleError(error) {
+    console.error(error);
+    this.notify.update(error.message, "error");
   }
 }

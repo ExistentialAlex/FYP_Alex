@@ -15,6 +15,7 @@ import { DragndropDirective } from '../common/directives/dragndrop.directive';
 import { FilePageComponent } from './pages/file-page/file-page.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FileDetailsComponent } from './components/file-details/file-details.component';
 
 const routes: Route[] = [
   {
@@ -48,7 +49,8 @@ const routes: Route[] = [
     LocationViewerComponent,
     LocationViewerPageComponent,
     DragndropDirective,
-    FileSizePipe
+    FileSizePipe,
+    FileDetailsComponent
   ],
   providers: [
     AuthService,

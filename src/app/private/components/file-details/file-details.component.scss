@@ -1,0 +1,28 @@
+@import '../../../../sass/variables';
+
+.row {
+    padding: 0;
+}
+
+.file-details-card {
+    margin-top: 1em;
+    padding: 0;
+}
+
+.file-details {
+    box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
+    padding: 0;
+}
+
+.file-details-text {
+    margin-top: 1em;
+}
+
+.icon-container {
+    margin: 1em;
+    text-align: center;
+}
+
+.word-icon, .pdf-icon, .txt-icon {
+    color: $primary-color;
+}

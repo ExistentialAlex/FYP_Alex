@@ -28,7 +28,7 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router,
-    private notify: NotifyService
+    public notify: NotifyService
   ) {
     //// Get auth data, then get firestore user document || null
     this.user = this.afAuth.authState.pipe(

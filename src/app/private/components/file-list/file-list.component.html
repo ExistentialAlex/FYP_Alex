@@ -1,11 +1,19 @@
 <div class="file-list">
+  <div class="row list-header">
+    <div class="col-2">File Type</div>
+    <div class="col-4">File Name</div>
+    <div class="col-2">File Size</div>
+    <div class="col-2">Processing</div>
+    <div class="col-2">Details</div>
+  </div>
+  <hr />
   <div class="file-row" *ngFor="let file of fileList">
     <div class="row align-items-center">
       <div class="col-2 file-extension">
-        <div *ngIf="file.file_extension == 'docx'; then word"></div>
-        <div *ngIf="file.file_extension == 'doc'; then word"></div>
-        <div *ngIf="file.file_extension == 'pdf'; then pdf"></div>
-        <div *ngIf="file.file_extension == 'txt'; then txt"></div>
+        <div *ngIf="file.file_extension == 'docx'; then: word"></div>
+        <div *ngIf="file.file_extension == 'doc'; then: word"></div>
+        <div *ngIf="file.file_extension == 'pdf'; then: pdf"></div>
+        <div *ngIf="file.file_extension == 'txt'; then: txt"></div>
       </div>
       <div class="col-4 file-name">{{ file.file_name }}</div>
       <div class="col-2 file-size">{{ file.size | fileSize }}</div>
