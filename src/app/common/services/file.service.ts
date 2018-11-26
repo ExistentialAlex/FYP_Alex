@@ -61,8 +61,8 @@ export class FileService {
       .valueChanges();
   }
 
-  getContextLocation(context) {
-    return this.db.doc(`FYP_LOCATIONS/${context.lid}`).valueChanges();
+  getContextLocation(lid) {
+    return this.db.doc(`FYP_LOCATIONS/${lid}`).valueChanges();
   }
 
   deleteFile(fid, ext): void {

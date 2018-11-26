@@ -1,28 +1,67 @@
-@import '../../../../sass/variables';
+@import "../../../../sass/variables";
 
 .row {
-    padding: 0;
+  padding: 0;
 }
 
 .file-details-card {
-    margin-top: 1em;
-    padding: 0;
+  margin-top: 1em;
+  padding: 0;
 }
 
 .file-details {
-    box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
-    padding: 0;
+  box-shadow: 0 0.125em 0.5em rgba(0, 0, 0, 0.2);
+  padding: 0;
 }
 
 .file-details-text {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 
 .icon-container {
-    margin: 1em;
-    text-align: center;
+  margin: 1em;
+  text-align: center;
 }
 
-.word-icon, .pdf-icon, .txt-icon {
-    color: $primary-color;
+.word-icon,
+.pdf-icon,
+.txt-icon {
+  color: $primary-color;
+}
+
+.city,
+.town {
+  text-decoration: none;
+  color: #000000;
+  text-align: left;
+  display: inline;
+}
+
+.sentimentValue {
+    display: inline-block;
+}
+
+.contextsNumber {
+  text-align: right;
+}
+
+.sentimentBubble {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  border: solid 1px #000000;
+  margin-right: 0.75em;
+}
+
+.positive {
+  background-color: #1fe90d;
+}
+
+.negative {
+  background-color: #ff4800;
+}
+
+.neutral {
+  background-color: transparent;
 }

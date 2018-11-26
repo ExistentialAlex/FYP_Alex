@@ -17,7 +17,6 @@ interface User {
   last_name?: string;
 }
 
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
