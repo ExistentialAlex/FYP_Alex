@@ -1,0 +1,136 @@
+<h1>Cities</h1>
+<div *ngFor="let city of cities">
+  <div class="row">
+    <div class="col-12">
+      <div class="row align-items-center">
+        <div class="col-8 city">
+          <div class="location-title location-title-text">
+            {{ city.location_name }}
+          </div>
+          <div class="v-rule location-title"></div>
+          <div class="location-title">
+            <span
+              class="sentimentBubble"
+              [ngClass]="{
+                positive: city.sentimental_value > 0,
+                negative: city.sentimental_value < 0,
+                neutral: city.sentimental_value == 0
+              }"
+            ></span>
+            <span class="sentimentValue location-title-text">
+              {{ city.sentimental_value }}
+            </span>
+          </div>
+
+          <div class="v-rule location-title"></div>
+          <div class="location-title location-title-text">
+            Contexts: {{ city.contexts.length }}
+          </div>
+        </div>
+        <div class="col-4">
+          <button
+            class="hamburger hamburger--spin"
+            [attr.id]="'hamburger' + city.lid"
+            type="button"
+            data-toggle="collapse"
+            [attr.data-target]="'#collapse' + city.lid"
+            aria-expanded="false"
+            aria-controls="collapse"
+            (click)="cs.toggleHamburger(city.lid)"
+          >
+            <span class="hamburger-box">
+              <span class="hamburger-inner"></span>
+            </span>
+            <span class="hamburger-label">Contexts</span>
+          </button>
+        </div>
+      </div>
+      <div class="collapse" id="collapse{{city.lid}}">
+        <div *ngFor="let context of city.contexts">
+          <div class="card context-card">
+            <div class="row align-items-center">
+              <div class="col-10">
+                <div class="context-text">{{ context.context_string }}</div>
+              </div>
+              <div class="col-2 context-options">
+                <div class="delete-container">
+                  <button
+                    type="button"
+                    class="delete-btn"
+                    data-toggle="modal"
+                    [attr.data-target]="'#deleteModal' + context.cid"
+                  >
+                    <fa-icon
+                      class="delete-icon"
+                      [icon]="faMinusCircle"
+                      size="2x"
+                    ></fa-icon>
+                  </button>
+                  <div
+                    class="modal fade"
+                    id="deleteModal{{context.cid}}"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="deleteModalLabel"
+                    aria-hidden="true"
+                  >
+                    <div
+                      class="modal-dialog modal-dialog-centered"
+                      role="document"
+                    >
+                      <div class="modal-content delete-modal">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">
+                            Delete Context
+                          </h5>
+                          <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                          >
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to delete the context?
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-rounded btn-cancel"
+                            data-dismiss="modal"
+                          >
+                            Close
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-rounded"
+                            (click)="deleteContext(context.cid)"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  class="sentimentBubble"
+                  [ngClass]="{
+                    positive: context.sentimental_value > 0,
+                    negative: context.sentimental_value < 0,
+                    neutral: context.sentimental_value == 0
+                  }"
+                ></span>
+                <span class="sentimentValue">
+                  {{ context.sentimental_value }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

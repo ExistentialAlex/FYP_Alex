@@ -94,10 +94,8 @@ export class FileService {
   }
 
   deleteAllContexts(cid: string[]): void {
-    for (var i=0; i < cid.length; i++) {
-      this.deleteContext(cid[i])
+    cid.forEach(cid => this.deleteContext(cid))
     }
-  }
 
   startFileUpload(event: FileList) {
     for (var i = 0; i < event.item.length; i++) {

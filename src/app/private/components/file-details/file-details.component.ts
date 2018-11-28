@@ -4,7 +4,8 @@ import { FileService } from "src/app/common/services/file.service";
 import {
   faFileWord,
   faFile,
-  faFilePdf
+  faFilePdf,
+  faMinusCircle
 } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
@@ -16,21 +17,24 @@ export class FileDetailsComponent implements OnInit {
   //Variables
   file: any;
   contexts: Array<any>;
-  towns: Array<any>;
-  cities: Array<any>;
+  townsTemp: Array<any>;
+  citiesTemp: Array<any>;
+  townsFinal: Array<any>;
+  citiesFinal: Array<any>;
 
   //Icon generation
   faFileWord = faFileWord;
   faFile = faFile;
   faFilePdf = faFilePdf;
+  faMinusCircle = faMinusCircle;
 
   constructor(private route: ActivatedRoute, private fs: FileService) {}
 
   ngOnInit() {
     //Initialise each variable, otherwise errors are produced
     this.file = {};
-    this.towns = [];
-    this.cities = [];
+    this.townsTemp = [];
+    this.citiesTemp = [];
     //Retrieve the file data
     this.getFileData();
   }
@@ -60,10 +64,12 @@ export class FileDetailsComponent implements OnInit {
   getLocations(contexts) {
     const waitFor = contexts.length;
     let resolved = 0;
+    //Loop through each context and get the location of the context
     for (var i = 0; i < contexts.length; i++) {
       this.fs.getContextLocation(contexts[i].lid).subscribe(location => {
         this.sortLocations(location);
         resolved++;
+        //Wait for all locations to be retrieved before appending contexts
         if (resolved == waitFor) {
           this.appendContexts(contexts);
         }
@@ -71,41 +77,46 @@ export class FileDetailsComponent implements OnInit {
     }
   }
 
+  //Sort the locations into towns and cities
   sortLocations(location) {
     if (location.location_type == "town") {
-      this.towns.push(location);
+      this.townsTemp.push(location);
     } else if (location.location_type == "city") {
-      this.cities.push(location);
+      this.citiesTemp.push(location);
     }
   }
 
+  //Add the contexts to the towns and cities
   appendContexts(contexts) {
-    const towns = this.towns.filter(
+    //Filter out duplicate towns and cities
+    const towns = this.townsTemp.filter(
       (town, index, self) => self.findIndex(t => t.lid === town.lid) === index
     );
-    const cities = this.cities.filter(
+    const cities = this.citiesTemp.filter(
       (city, index, self) => self.findIndex(c => c.lid === city.lid) === index
     );
 
     towns.forEach(element => {
-      element.contexts = []
+      element.contexts = [];
       for (var i = 0; i < contexts.length; i++) {
         if (contexts[i].lid == element.lid) {
-          element.contexts.push(contexts[i])
+          element.contexts.push(contexts[i]);
         }
       }
-    })
+    });
     cities.forEach(element => {
-      element.contexts = []
+      element.contexts = [];
       for (var i = 0; i < contexts.length; i++) {
         if (contexts[i].lid == element.lid) {
-          element.contexts.push(contexts[i])
+          element.contexts.push(contexts[i]);
         }
       }
-    })
-    console.log(towns);
-    console.log(cities);
-    this.towns = towns;
-    this.cities = cities;
+    });
+    this.townsFinal = towns;
+    this.citiesFinal = cities;
+  }
+
+  deleteContext(cid) {
+    this.fs.deleteContext(cid)
   }
 }

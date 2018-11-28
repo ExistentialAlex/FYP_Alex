@@ -22,7 +22,7 @@ import { NotifyService } from './common/services/notify.service';
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,

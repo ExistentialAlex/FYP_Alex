@@ -39,11 +39,27 @@ html, body {
     background: #ffffff;
 }
 
+.v-rule {
+    height: 1em;
+    width:1px;
+    background:rgba(0,0,0,0.2);
+}
+
 .btn {
     box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
     background-color: $primary-color;
     color: #ffffff;
     font-weight: 600;
+}
+
+.btn:hover {
+    background-color: $dark-color
+}
+
+.btn:active:focus {
+    background-color: $light-color;
+    border-color: $light-color;
+    box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
 }
 
 .btn-rounded {

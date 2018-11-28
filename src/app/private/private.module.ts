@@ -16,6 +16,8 @@ import { FilePageComponent } from './pages/file-page/file-page.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FileDetailsComponent } from './components/file-details/file-details.component';
+import { CityListComponent } from './components/city-list/city-list.component';
+import { TownListComponent } from './components/town-list/town-list.component';
 
 const routes: Route[] = [
   {
@@ -50,7 +52,9 @@ const routes: Route[] = [
     LocationViewerPageComponent,
     DragndropDirective,
     FileSizePipe,
-    FileDetailsComponent
+    FileDetailsComponent,
+    CityListComponent,
+    TownListComponent
   ],
   providers: [
     AuthService,
