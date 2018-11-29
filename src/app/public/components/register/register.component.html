@@ -35,12 +35,12 @@
     </div>
   </form>
 
-  <p class="registerForm" *ngIf="user.uid && user.first_name && user.last_name">Thank you for registering</p>
+  <p class="registerForm thank-you" *ngIf="user.uid && user.first_name && user.last_name">Thank you for registering</p>
 
   <hr>
 
   <div class="googleLogin">
-    <button class="btn btn-default googleLoginBtn" (click)="auth.googleLogin()">Sign in with Google</button>
+    <button class="btn btn-rounded btn-default googleLoginBtn" (click)="auth.googleLogin()">Sign in with Google</button>
   </div>
 
 </ng-container>

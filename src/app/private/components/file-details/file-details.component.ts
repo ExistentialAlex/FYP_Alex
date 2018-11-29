@@ -26,7 +26,6 @@ export class FileDetailsComponent implements OnInit {
   faFileWord = faFileWord;
   faFile = faFile;
   faFilePdf = faFilePdf;
-  faMinusCircle = faMinusCircle;
 
   constructor(private route: ActivatedRoute, private fs: FileService) {}
 

@@ -61,7 +61,7 @@ export class AuthService {
   login(email: string, password: string) {
     this.afAuth.auth.signInWithEmailAndPassword(email,password)
     .then(() => {
-      this.router.navigate(['/private/map']);
+      this.router.navigate(['/private/profile']);
     })
     .catch(error => this.handleError(error));
   }
@@ -97,7 +97,7 @@ export class AuthService {
     const provider = new auth.GoogleAuthProvider()
     this.oAuthLogin(provider)
     .then(() => {
-      this.router.navigate(['/private/map']);
+      this.router.navigate(['/private/profile']);
     })
     .catch(error => this.handleError(error));
   }
