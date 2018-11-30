@@ -22,19 +22,22 @@
         </div>
       </div>
     </div>
-    <div class="row locations-card">
-      <div class="col-12">
-        <div *ngIf="citiesFinal">
-          <app-city-list></app-city-list>
+    <div style="overflow-y:auto;">
+      <div class="row locations-card">
+        <div class="col-12">
+          <div *ngIf="citiesFinal"><app-city-list></app-city-list></div>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-12">
+          <div *ngIf="townsFinal"><app-town-list></app-town-list></div>
         </div>
       </div>
     </div>
-    <hr />
     <div class="row">
-      <div class="col-12">
-        <div *ngIf="townsFinal">
-            <app-town-list></app-town-list>
-        </div>
+      <div class="col-12 delete-file-btn">
+        <button class="btn btn-rounded">Delete File</button>
       </div>
     </div>
   </div>

@@ -33,8 +33,7 @@ export class FileService {
   constructor(
     private storage: AngularFireStorage,
     private db: AngularFirestore,
-    private auth: AuthService,
-    private notify: NotifyService
+    private auth: AuthService
   ) {}
 
   getUserFiles(): Observable<{}[]> {
@@ -78,19 +77,19 @@ export class FileService {
           .then(() => {
             console.log("File Deleted Successfully");
           })
-          .catch(error => this.handleError(error));
+          .catch(error => this.auth.handleError(error));
       })
-      .catch(error => this.handleError(error));
+      .catch(error => this.auth.handleError(error));
   }
 
   deleteContext(cid): void {
     this.db
-      .doc(`FYP_CONTEXT/${cid}`)
+      .doc(`FYP_CONTEXTS/${cid}`)
       .delete()
       .then(() => {
         console.log("Context Deleted Successfully");
       })
-      .catch(error => this.handleError(error));
+      .catch(error => this.auth.handleError(error));
   }
 
   deleteAllContexts(cid: string[]): void {
@@ -154,10 +153,5 @@ export class FileService {
       snapshot.state === "running" &&
       snapshot.bytesTransferred < snapshot.totalBytes
     );
-  }
-
-  private handleError(error) {
-    console.error(error);
-    this.notify.update(error.message, "error");
   }
 }

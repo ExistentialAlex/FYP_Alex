@@ -78,7 +78,7 @@ export class AuthService {
     return this.afs.doc(`FYP_USERS/${user.uid}`).update(data)
   }
 
-  private handleError(error) {
+  public handleError(error) {
     console.error(error);
     this.notify.update(error.message, 'error')
   }

@@ -10,14 +10,13 @@
           <div class="v-rule location-title"></div>
           <div class="location-title">
             <span
-              class="sentimentBubble"
+              class="sentimentValue btn btn-rounded location-title-text"
               [ngClass]="{
                 positive: town.sentimental_value > 0,
                 negative: town.sentimental_value < 0,
                 neutral: town.sentimental_value == 0
               }"
-            ></span>
-            <span class="sentimentValue location-title-text">
+            >
               {{ town.sentimental_value }}
             </span>
           </div>
@@ -106,7 +105,7 @@
                           <button
                             type="button"
                             class="btn btn-rounded"
-                            (click)="deleteContext(context.cid)"
+                            (click)="fd.deleteContext(context.cid)"
                           >
                             Delete
                           </button>
@@ -116,14 +115,13 @@
                   </div>
                 </div>
                 <span
-                  class="sentimentBubble"
+                  class="sentimentValue btn btn-rounded"
                   [ngClass]="{
-                    positive: context.sentimental_value > 0,
-                    negative: context.sentimental_value < 0,
-                    neutral: context.sentimental_value == 0
+                    positive: town.sentimental_value > 0,
+                    negative: town.sentimental_value < 0,
+                    neutral: town.sentimental_value == 0
                   }"
-                ></span>
-                <span class="sentimentValue">
+                >
                   {{ context.sentimental_value }}
                 </span>
               </div>

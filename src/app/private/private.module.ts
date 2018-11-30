@@ -18,6 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FileDetailsComponent } from './components/file-details/file-details.component';
 import { CityListComponent } from './components/city-list/city-list.component';
 import { TownListComponent } from './components/town-list/town-list.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Route[] = [
   {
@@ -39,7 +40,8 @@ const routes: Route[] = [
     CommonModule,
     RouterModule,
     RouterModule.forChild(routes),
-    FontAwesomeModule
+    FontAwesomeModule,
+    ReactiveFormsModule
   ],
   declarations: [
     MapPageComponent,

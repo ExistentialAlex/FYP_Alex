@@ -54,6 +54,9 @@
 
 .sentimentValue {
     display: inline-block;
+    font-size: 1em;
+    font-weight: 600;
+    box-shadow: none;
 }
 
 .contextsNumber {
@@ -119,4 +122,8 @@
 
 .btn-cancel {
   background-color: #a7a7a7;
+}
+
+.delete-file-btn {
+  margin:1em;
 }
