@@ -32,8 +32,12 @@ const routes: Route[] = [
   {
     path: 'fileDetails/:id',
     component: FilePageComponent
+  },
+  {
+    path: 'locationViewer/:id',
+    component: LocationViewerPageComponent
   }
-]
+];
 
 @NgModule({
   imports: [

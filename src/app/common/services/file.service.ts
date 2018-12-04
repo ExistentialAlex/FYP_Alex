@@ -28,12 +28,6 @@ interface Context {
   date: number;
 }
 
-interface Location {
-  lid: string;
-  location_name: string;
-  location_type: string;
-  sentimental_value: number;
-}
 @Injectable({
   providedIn: 'root'
 })
@@ -76,10 +70,6 @@ export class FileService {
     return this.db
       .collection('FYP_CONTEXTS', ref => ref.where('fid', '==', `${fid}`))
       .valueChanges();
-  }
-
-  getContextLocation(lid: string): Observable<Object> {
-    return this.db.doc(`FYP_LOCATIONS/${lid}`).valueChanges();
   }
 
   getCids(fid: string): Array<string> {

@@ -52,6 +52,21 @@
   font-size: 1.25em;
 }
 
+.loc-link {
+  text-decoration: none;
+  color: #000000;
+  border-bottom: 1px solid transparent;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+.loc-link:hover {
+  color: $primary-color;
+  border-color: $primary-color;
+}
+
 .sentimentValue {
     display: inline-block;
     font-size: 1em;

@@ -6,6 +6,7 @@ import {
   faFile,
   faFilePdf
 } from '@fortawesome/free-solid-svg-icons';
+import { LocationService } from 'src/app/common/services/location.service';
 
 @Component({
   selector: 'app-file-details',
@@ -14,7 +15,7 @@ import {
 })
 export class FileDetailsComponent implements OnInit {
   // Variables
-  file: any;
+  file: Object;
   contexts: Array<any>;
   townsTemp: Array<any>;
   citiesTemp: Array<any>;
@@ -26,7 +27,11 @@ export class FileDetailsComponent implements OnInit {
   faFile = faFile;
   faFilePdf = faFilePdf;
 
-  constructor(private route: ActivatedRoute, private fs: FileService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private fs: FileService,
+    private ls: LocationService
+  ) {}
 
   ngOnInit() {
     // Initialise each variable, otherwise errors are produced
@@ -39,16 +44,15 @@ export class FileDetailsComponent implements OnInit {
 
   // Retrieves the file data to be displayed in the FileDetailComponent
   getFileData() {
-    let fid = '';
     // Retrieves the file ID from the URL
     this.route.params.subscribe(params => {
-      fid = params['id'];
+      const fid = params['id'];
+      // Retrieves the file data from the db
+      this.fs.getFile(fid).subscribe(file => {
+        this.file = file;
+      });
+      this.getContexts(fid);
     });
-    // Retrieves the file data from the db
-    this.fs.getFile(fid).subscribe(file => {
-      this.file = file;
-    });
-    this.getContexts(fid);
   }
 
   // Retrieves the array of contexts for a file from the db
@@ -64,7 +68,7 @@ export class FileDetailsComponent implements OnInit {
     let resolved = 0;
     // Loop through each context and get the location of the context
     for (let i = 0; i < contexts.length; i++) {
-      this.fs.getContextLocation(contexts[i].lid).subscribe(location => {
+      this.ls.getLocation(contexts[i].lid).subscribe(location => {
         this.sortLocations(location);
         resolved++;
         // Wait for all locations to be retrieved before appending contexts
