@@ -26,11 +26,11 @@ export class LoginComponent implements OnInit {
         Validators.maxLength(25),
         Validators.required
       ]]
-    })
+    });
   }
 
-  get email() {return this.loginForm.get('email')};
-  get password() {return this.loginForm.get('password')};
+  get email() {return this.loginForm.get('email'); }
+  get password() {return this.loginForm.get('password'); }
 
   login() {
     this.auth.login(this.email.value, this.password.value);

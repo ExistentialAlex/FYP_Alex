@@ -9,11 +9,11 @@ export class CommonService {
   constructor(private location: Location) { }
 
   toggleHamburger(lid) {
-    var hamburger = document.getElementById('hamburger' + lid);
-    hamburger.classList.toggle("is-active");
+    const hamburger = document.getElementById('hamburger' + lid);
+    hamburger.classList.toggle('is-active');
   }
 
   goBack() {
-    this.location.back()
+    this.location.back();
   }
 }

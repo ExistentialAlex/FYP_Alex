@@ -26,6 +26,6 @@ export class FileListComponent implements OnInit {
   getUsersFiles() {
     this.fs.getUserFiles().subscribe(userFiles => {
       this.fileList = userFiles;
-    })
+    });
   }
 }

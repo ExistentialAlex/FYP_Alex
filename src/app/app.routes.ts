@@ -1,4 +1,4 @@
-import { Route } from "@angular/router";
+import { Route } from '@angular/router';
 
 export const routes: Route[] = [
     {
@@ -18,4 +18,4 @@ export const routes: Route[] = [
         path: '**',
         redirectTo: 'public'
     }
-]
+];

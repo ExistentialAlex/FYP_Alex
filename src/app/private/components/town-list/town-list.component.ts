@@ -10,18 +10,18 @@ import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 })
 export class TownListComponent implements OnInit {
 
-  towns: Array<any>
+  towns: Array<any>;
 
-  faMinusCircle = faMinusCircle
+  faMinusCircle = faMinusCircle;
 
   constructor(private fd: FileDetailsComponent, private cs: CommonService) { }
 
   ngOnInit() {
-    this.getTowns()
+    this.getTowns();
   }
 
   getTowns() {
-    this.towns = this.fd.townsFinal
+    this.towns = this.fd.townsFinal;
   }
 
 }

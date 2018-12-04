@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../common/services/auth.service'
+import { AuthService } from '../../../common/services/auth.service';
 import { FormGroup, FormBuilder, Validators, } from '@angular/forms';
 
 @Component({
@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
         Validators.maxLength(25),
         Validators.required
       ]]
-    })
+    });
 
     this.detailsForm = this.fb.group({
       'first_name': ['', [
@@ -36,20 +36,20 @@ export class RegisterComponent implements OnInit {
       'last_name': ['', [
         Validators.required
       ]]
-    })
+    });
   }
-  get email() {return this.registerForm.get('email')}
-  get password() {return this.registerForm.get('password')}
+  get email() {return this.registerForm.get('email'); }
+  get password() {return this.registerForm.get('password'); }
 
-  get firstName() {return this.detailsForm.get('first_name')}
-  get lastName() {return this.detailsForm.get('last_name')}
+  get firstName() {return this.detailsForm.get('first_name'); }
+  get lastName() {return this.detailsForm.get('last_name'); }
 
   signup() {
-    return this.auth.emailSignUp(this.email.value, this.password.value)
+    return this.auth.emailSignUp(this.email.value, this.password.value);
   }
 
   setDetails(user) {
-    return this.auth.updateUser(user, {first_name: this.firstName.value, last_name: this.lastName.value})
+    return this.auth.updateUser(user, {first_name: this.firstName.value, last_name: this.lastName.value});
   }
 
 }
