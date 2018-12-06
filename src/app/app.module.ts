@@ -14,6 +14,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { NavBarComponent } from './common/components/nav-bar/nav-bar.component';
 import { AuthService } from './common/services/auth.service';
 import { NotifyService } from './common/services/notify.service';
+import { AuthGuard } from './common/guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { NotifyService } from './common/services/notify.service';
   ],
   providers: [
     AuthService,
-    NotifyService
+    NotifyService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

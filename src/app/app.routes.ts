@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { AuthGuard } from './common/guards/auth.guard';
 
 export const routes: Route[] = [
     {
@@ -7,7 +8,8 @@ export const routes: Route[] = [
     },
     {
         path: 'private',
-        loadChildren: './private/private.module#PrivateModule'
+        loadChildren: './private/private.module#PrivateModule',
+        canActivate: [AuthGuard]
     },
     {
         path: '',
