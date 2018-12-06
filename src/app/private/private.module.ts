@@ -19,6 +19,7 @@ import { FileDetailsComponent } from './components/file-details/file-details.com
 import { CityListComponent } from './components/city-list/city-list.component';
 import { TownListComponent } from './components/town-list/town-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserDetailsFormComponent } from './components/user-details-form/user-details-form.component';
 
 const routes: Route[] = [
   {
@@ -60,7 +61,8 @@ const routes: Route[] = [
     FileSizePipe,
     FileDetailsComponent,
     CityListComponent,
-    TownListComponent
+    TownListComponent,
+    UserDetailsFormComponent
   ],
   providers: [
     AuthService,

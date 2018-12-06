@@ -1,0 +1,65 @@
+<form [formGroup]="userForm">
+  <div class="row">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-12 col-md-6 form-group">
+          <label for="first_name">First Name</label>
+          <input
+            type="first_name"
+            formControlName="first_name"
+            class="form-control input_rounded"
+            [value]="user.first_name"
+          />
+        </div>
+        <div class="col-12 col-md-6 form-group">
+          <label for="last_name">Last Name</label>
+          <input
+            type="last_name"
+            formControlName="last_name"
+            class="form-control input_rounded"
+            [value]="user.last_name"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-6 form-group">
+          <label for="gender">Gender</label>
+          <select
+            type="gender"
+            formControlName="gender"
+            class="form-control input_rounded"
+          >
+            <option value="" disabled selected *ngIf="user.gender">
+              {{ user.gender }}
+            </option>
+            <option *ngFor="let gender of genders" [value]="gender.gender">
+              {{ gender.gender }}
+            </option>
+          </select>
+        </div>
+        <div class="col-12 col-md-6 form-group">
+          <label for="location">Location</label>
+          <select
+            type="location"
+            formControlName="location"
+            class="form-control input_rounded"
+          >
+            <option value="" disabled selected *ngIf="user.location">
+              {{ user.location }}
+            </option>
+            <option *ngFor="let location of locations" [value]="location.country_name">
+              {{ location.country_name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <button class="btn btn-rounded" type="button" (click)="updateUserDetails(user)">
+            Save Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

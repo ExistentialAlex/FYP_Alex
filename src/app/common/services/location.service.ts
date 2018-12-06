@@ -18,4 +18,8 @@ export class LocationService {
   getLocation(lid: string): Observable<Object> {
     return this.db.doc(`FYP_LOCATIONS/${lid}`).valueChanges();
   }
+
+  getAllLocations(): Observable<Array<Object>> {
+    return this.db.collection(`FYP_COUNTRIES`, ref => ref.orderBy('country_name')).valueChanges();
+  }
 }
