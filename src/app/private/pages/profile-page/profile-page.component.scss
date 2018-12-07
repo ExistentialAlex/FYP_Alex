@@ -1,7 +1,11 @@
-.file-section {
+.file-section, .user-section {
     padding: 0;
 }
 
-.file-upload {
+.file-upload, .user-profile {
     box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
+}
+
+.user-form {
+    margin-top: 1em !important;
 }

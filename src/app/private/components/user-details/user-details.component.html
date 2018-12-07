@@ -1,7 +1,12 @@
-<div class="row">
+<div class="row user-profile">
   <div class="col-12">
-    <div class="row"><div class="col-12"></div></div>
-    <div class="row"><div class="col-12">{{user.email}}</div></div>
+    <div class="row">
+      <div class="col-12">
+        <img class="user-profile-img" src="{{user.photoURL}}"/>
+      </div>
+    </div>
+    <div class="row user-profile-email">
+      <div class="col-12">{{user.email}}</div>
+    </div>
   </div>
 </div>
-<app-user-details-form></app-user-details-form>

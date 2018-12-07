@@ -1,9 +1,22 @@
-select:required:invalid {
-    color: gray;
-  }
-  option[value=""][disabled] {
-    display: none;
-  }
-  option {
-    color: black;
-  }
+@import "../../../../sass/variables";
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 300px;
+  background: white;
+  margin: 10px 0 !important;
+}
+
+.user-profile-img {
+  max-width: 15em;
+  border-radius: 15em;
+  margin-top: 1em;
+}
+
+.user-profile-email {
+  margin-top: 1em!important;
+  font-weight: 400;
+}
