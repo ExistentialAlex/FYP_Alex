@@ -19,7 +19,7 @@
     display: inline-block;
 }
 
-.file-upload {
+.file-upload-btn {
 	width: 0.1px;
 	height: 0.1px;
 	opacity: 0;
@@ -28,7 +28,7 @@
 	z-index: -1;
 }
 
-.file-upload + label {
+.file-upload-btn + label {
     font-size: 1.25em;
     font-weight: 600;
     color: white;
@@ -36,8 +36,8 @@
     display: inline-block;
 }
 
-.file-upload:focus + label,
-.file-upload + label:hover {
+.file-upload-btn:focus + label,
+.file-upload-btn + label:hover {
     background-color: $dark-color;
 }
 
