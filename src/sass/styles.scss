@@ -46,7 +46,7 @@ html, body {
 }
 
 .btn {
-    box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
+    box-shadow: $shadow;
     background-color: $primary-color;
     color: #ffffff;
     font-weight: 600;
@@ -59,7 +59,7 @@ html, body {
 .btn:active:focus {
     background-color: $light-color;
     border-color: $light-color;
-    box-shadow: 0 0.125em 0.5em rgba(0,0,0,0.2);
+    box-shadow: $shadow;
 }
 
 .btn-rounded {
