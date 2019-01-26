@@ -8,6 +8,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase/app';
 
 interface File {
   fid: string;
@@ -52,7 +53,7 @@ export class FileService {
     return this.auth
       .getUserData()
       .pipe(
-        switchMap((user) =>
+        switchMap(user =>
           this.db
             .collection('FYP_FILES', ref =>
               ref.where('uid', '==', `${user.uid}`)
@@ -74,22 +75,24 @@ export class FileService {
 
   getCids(fid: string): Array<string> {
     const cids = [];
-    this.getFileContexts(fid).subscribe(contexts => contexts.forEach((context: Context) => {
-      cids.push(context.cid);
-    }));
+    this.getFileContexts(fid).subscribe(contexts =>
+      contexts.forEach((context: Context) => {
+        cids.push(context.cid);
+      })
+    );
     return cids;
   }
 
   deleteFile(fid: string, ext: string): void {
     const userID = this.auth.getUserID();
+    const fileName = fid + '.' + ext;
+    const storageRef = firebase.storage().ref();
     this.deleteAllContexts(this.getCids(fid));
-    this.db
-      .doc(`FYP_FILES/${fid}`)
+    storageRef.child(`FYP_FILES/${userID}/${fileName}`)
       .delete()
       .then(() => {
-        const fileName = fid + '.' + ext;
-        this.storage.storage
-          .refFromURL(`FYP_FILES/${userID}/${fileName}`)
+        this.db
+          .doc(`FYP_FILES/${fid}`)
           .delete()
           .then(() => {
             console.log('File Deleted Successfully');
@@ -114,7 +117,7 @@ export class FileService {
     cids.forEach(cid => {
       return this.deleteContext(cid);
     });
-    }
+  }
 
   startFileUpload(event: FileList): void {
     for (let i = 0; i < event.item.length; i++) {

@@ -81,7 +81,8 @@
         <button
           type="button"
           class="btn btn-rounded"
-          (click)="fs.getCids(file.fid)"
+          data-dismiss="modal"
+          (click)="fs.deleteFile(file.fid, file.file_extension)"
         >
           Delete
         </button>
