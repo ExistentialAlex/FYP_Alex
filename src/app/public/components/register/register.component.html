@@ -10,7 +10,7 @@
         class="form-control input_rounded"
       />
     </div>
-    <div *ngIf="email.invalid && email.dirty">
+    <div *ngIf="email.invalid && email.dirty" class="email-check ml-auto mr-auto">
       Your email doesn't look quite right...
     </div>
     <div class="form-group login-div">
@@ -22,9 +22,9 @@
         required
       />
     </div>
-    <div *ngIf="password.invalid && password.touched">
+    <div *ngIf="password.invalid && password.touched" class="password-check ml-auto mr-auto">
       Passwords must be between 6 and 25 characters long and contain at least
-      one number.
+      one number and contain no special characters.
     </div>
     <div class="login-div">
       <button
