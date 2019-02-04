@@ -96,7 +96,7 @@ export class FileService {
           .delete()
           .then(() => {
             console.log('File Deleted Successfully');
-            this.router.navigate(['/private/profile']);
+            this.router.navigate(['/private/files']);
           })
           .catch(error => this.auth.handleError(error));
       })
