@@ -20,11 +20,16 @@ import { CityListComponent } from './components/city-list/city-list.component';
 import { TownListComponent } from './components/town-list/town-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserDetailsFormComponent } from './components/user-details-form/user-details-form.component';
+import { FileUploadPageComponent } from './pages/file-upload-page/file-upload-page.component';
 
 const routes: Route[] = [
   {
     path: 'map',
     component: MapPageComponent
+  },
+  {
+    path: 'files',
+    component: FileUploadPageComponent
   },
   {
     path: 'profile',
@@ -62,7 +67,8 @@ const routes: Route[] = [
     FileDetailsComponent,
     CityListComponent,
     TownListComponent,
-    UserDetailsFormComponent
+    UserDetailsFormComponent,
+    FileUploadPageComponent
   ],
   providers: [
     AuthService,

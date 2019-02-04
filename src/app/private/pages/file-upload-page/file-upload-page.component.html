@@ -1,0 +1,34 @@
+<div class="full_page">
+  <div class="content">
+      <div *ngIf="auth.user; then authenticated else guest">
+
+      </div>
+  </div>
+</div>
+
+<ng-template #authenticated>
+  <div class="row">
+      <div class="col-12 col-md-8 ml-auto mr-auto component-container">
+          <div class="row file-upload">
+              <div class="col-12">
+                  <app-file-upload></app-file-upload>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-12">
+                  <app-file-list></app-file-list>
+              </div>
+          </div>
+      </div>
+  </div>
+</ng-template>
+
+<ng-template #guest>
+  <div class="row">
+      <div class="col-12">
+          <div class="row">
+              <p>Please sign in.</p>
+          </div>
+      </div>
+  </div>
+</ng-template>

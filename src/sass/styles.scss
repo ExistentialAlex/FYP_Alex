@@ -31,12 +31,19 @@
     z-index:0;
     text-align: center;
     padding-top: 56px;
+    margin-bottom: 2em;
 }
 
 html, body {
     font-family: roboto !important;
     font-weight: 300;
     background: #ffffff;
+}
+
+.component-container {
+    margin-top: 2em !important;
+    padding-bottom: 1em;
+    box-shadow: $shadow;
 }
 
 .v-rule {
