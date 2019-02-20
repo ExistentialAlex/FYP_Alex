@@ -1,10 +1,11 @@
-import functions = require("firebase-functions");
-import admin = require("firebase-admin");
-import path = require("path");
+import functions = require('firebase-functions');
+import admin = require('firebase-admin');
+import path = require('path');
+import suffixArray from './suffixArray';
 
 interface suffix {
   index: number;
-  rank: Array<number>[2];
+  rank: Array<any>;
 }
 
 interface Location {
@@ -15,186 +16,200 @@ interface Location {
 }
 
 interface Context {
-    lid: string;
-    context_string: string;
-    fid: string;
+  lid: string;
+  context_string: string;
+  fid: string;
 }
 
-export const processFile = functions.storage.object().onFinalize(file => {
+export const processFile = functions.storage.object().onFinalize(async file => {
+  const fileBucket = file.bucket;
+  const filePath = file.name;
+
+  console.log(`File path ${filePath}`);
+
+  const serviceAccount = require(__dirname + '/../config/serviceAccount.json');
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://fyp-alex.firebaseio.com'
+  });
+
+  console.log('Getting Download URL');
+  try {
+    const fileDet = path.basename(filePath);
+    const fileNameSplit = fileDet.split('.');
+    const fileExt = fileNameSplit.pop();
+    const fileName = fileNameSplit.join('.');
+    const bucket = admin.storage().bucket(fileBucket);
+    const fileRef = bucket.file(filePath);
+
+    const _path = `/tmp/${fileName}.${fileExt}`;
+    console.log(`Downloading to: ${_path}`);
+    await fileRef.download({ destination: _path });
+    console.log('File Saved');
+    doProcess(file, _path);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+function doProcess(file, publicUrl?: string) {
+  console.log(`Getting Details: ${publicUrl}`);
   const filePath = file.name;
   const fileDet = path.basename(filePath);
-  const fileName = fileDet.split('.')[0]
-  const fileExt = fileDet.split('.')[1];
-
-  console.log(filePath);
-  console.log(fileName);
-  console.log(fileExt);
-
-  admin.initializeApp();
+  const fileNameSplit = fileDet.split('.');
+  const fileExt = fileNameSplit.pop();
+  const fileName = fileNameSplit.join('.');
 
   switch (fileExt) {
     case 'docx':
     case 'doc':
       const WordExtractor = require('word-extractor');
       const extractor = new WordExtractor();
-      const extracted = extractor.extract(filePath);
-      extracted.then(function(document) {
-        const suffixArray = generateSuffixArray(document, document.length);
-        const contexts = createContexts(document, suffixArray, fileName);
-        contexts.forEach((context: Context) => {
-            admin.firestore().collection('FYP_CONTEXTS').add(context).then(contextDoc => {
-                console.log('Context Added:' + contextDoc);
-            }).catch(error => {
-                console.error(error);
-            });
-        })
+      const extracted = extractor.extract(publicUrl);
+      extracted.then(async function(document) {
+        const documentBody: string = document.getBody();
+        console.log(documentBody);
+        await fileProcessing(documentBody, fileName);
       });
       break;
     case 'pdf':
       break;
     case 'txt':
+      const textract = require('textract');
+      textract.fromFileWithPath(publicUrl, async function(
+        extractedError,
+        text
+      ) {
+        if (extractedError) {
+          console.error(extractedError);
+        }
+        if (text !== null) {
+          await fileProcessing(text, fileName);
+        }
+      });
       break;
     default:
       console.log('Unsupported File Type');
       return null;
   }
+
   const data = {
-      processed: 1
-  }
-  admin.firestore().doc('FYP_FILES/' + fileName).update(data).then(doc => {
-      console.log('Docment Processed:' + doc);
-  }).catch(error => {
-      console.error(error);
-  })
-});
-
-function createContexts(string, suffixArray, fileName): Array<Context> {
-    console.log('Creating Contexts');
-    const searchPatterns = admin
+    processed: 1
+  };
+  admin
     .firestore()
-    .collection('FYP_LOCATIONS')
-    .get();
-    const contexts = [];
-    
-    searchPatterns.then(locations => {
-        for (let i = 0; i < locations.size; i++) {
-          const locationDoc = locations.docs[i].data();
-          const indexLocations = binarySearch(
-            locationDoc.location_name,
-            string,
-            suffixArray,
-            string.length
-          );
-          for (const index of indexLocations) {
-            let left = index - 25;
-            const right = index + locationDoc.location_name.length + 25;
-            if (left < 0) {
-              left = 0;
-            }
-            const context = string.substr(left, right);
-            contexts.push({
-              lid: locationDoc.lid,
-              context_string: context,
-              fid: fileName
-            });
-          }
+    .doc('FYP_FILES/' + fileName)
+    .update(data)
+    .then(doc => {
+      console.log('Document Processed:' + fileName);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+async function fileProcessing(text, fileName) {
+  console.log(`Processing: ${fileName}`);
+  console.log('Creating Suffix Array');
+  const suffix_array = suffixArray(text);
+  console.log(`Suffix Array Created: ${suffix_array}`);
+  const searchPatterns = admin
+      .firestore()
+      .collection('FYP_LOCATIONS')
+      .get();
+  const contexts = await createContexts(text, suffix_array, fileName, searchPatterns);
+  contexts.forEach(async (context: Context) => {
+    try {
+      const contextDoc = await admin
+        .firestore()
+        .collection('FYP_CONTEXTS')
+        .add(context);
+      console.log(`Context Added: ${contextDoc}`);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
+async function createContexts(
+  string: string,
+  suffix_array: Array<number>,
+  fileName: string,
+  searchPatterns
+): Promise<Array<Context>> {
+  const contexts: Array<Context> = [];
+  console.log('Creating Contexts');
+  console.log('Getting Search Patterns');
+  try {
+    await searchPatterns;
+    console.log('Search Patterns Received');
+    for (let i = 0; searchPatterns.length; i++) {
+      const patternDoc = searchPatterns.docs[i].data();
+      const pattern: string = patternDoc.location_name.toLowerCase();
+      const indexPatterns = binarySearch(
+        pattern,
+        string.toLowerCase(),
+        suffix_array
+      );
+      for (const index of indexPatterns) {
+        let left = index - 25;
+        let right = index + patternDoc.location_name.length + 25;
+        if (left < 0) {
+          left = 0;
         }
-      }).catch(error => {
-          console.error(error);
-      });
-      return contexts;
-}
-
-function generateSuffixArray(string, strLength): Array<any> {
-  console.log('Generating Suffixes');
-  const suffixes = new Array<suffix>(strLength);
-  const ind = new Array(strLength);
-
-  for (let i = 0; i < strLength; i++) {
-    suffixes[i].index = i;
-    suffixes[i].rank[0] = string[i];
-    suffixes[i].rank[1] = i + 1 < strLength ? string[i + 1] : -1;
-  }
-
-  suffixes.sort(sortSuffixes());
-
-  for (let k = 4; k < 2 * strLength; k = k * 2) {
-    let rank = 0;
-    let prevRank = suffixes[0].rank[0];
-    suffixes[0].rank[0] = rank;
-    ind[suffixes[0].index] = 0;
-
-    for (let i = 1; i < strLength; i++) {
-      if (
-        suffixes[i].rank[0] === prevRank &&
-        suffixes[i].rank[1] === suffixes[i - 1].rank[1]
-      ) {
-        prevRank = suffixes[i].rank[0];
-        suffixes[i].rank[0] = rank;
-      } else {
-        prevRank = suffixes[i].rank[0];
-        suffixes[i].rank[0] = ++rank;
+        if (right > string.length) {
+          right = string.length;
+        }
+        const context = string.substring(left, right);
+        contexts.push({
+          lid: patternDoc.lid,
+          context_string: context,
+          fid: fileName
+        });
       }
-      ind[suffixes[i].index] = i;
     }
-
-    for (let i = 0; i < strLength; i++) {
-      const nextIndex = suffixes[i].index + k / 2;
-      suffixes[i].rank[1] =
-        nextIndex < strLength ? suffixes[ind[nextIndex]].rank[0] : -1;
-    }
-
-    suffixes.sort(sortSuffixes());
+    return contexts;
+  } catch (error) {
+    console.error(error);
+    return contexts;
   }
-
-  const suffixArray = new Array(strLength);
-
-  for (let i = 0; i < strLength; i++) {
-    suffixArray[i] = suffixes[i].index;
-  }
-
-  return suffixArray;
-}
-
-function sortSuffixes(): (a: suffix, b: suffix) => number {
-    return function (a, b) {
-        return a.rank[0] === b.rank[0]
-            ? a.rank[1] < b.rank[1]
-                ? 1
-                : 0
-            : a.rank[0] < b.rank[0]
-                ? 1
-                : 0;
-    };
 }
 
 function binarySearch(
   pattern: string,
   string: string,
-  suffixArray: Array<number>,
-  strLength: number
+  suffix_array: Array<number>
 ): Array<number> {
-  let l = 0;
-  let r = strLength - 1;
+  console.log(`Beginning search for: ${pattern}`);
+  let start = 0;
+  let end = suffix_array.length;
+  const matchedIndexes: Array<number> = [];
 
-  const found = [];
+  while (start < end) {
+    const mid: number = (end - 1) / 2;
+    const index: number = suffix_array[mid];
+    const finalIndex: number = index + pattern.length;
+    if (finalIndex <= string.length) {
+      const substring: string = string.substring(index, finalIndex);
+      const match: number = pattern.localeCompare(substring);
 
-  while (l <= r) {
-    const mid = l + (r - l) / 2;
-    const res = pattern.localeCompare(string + suffixArray[mid]);
+      if (match === 0) {
+        console.log(`Match Found at Index: ${index}`);
+        matchedIndexes.push(index);
+      } else if (match < 0) {
+        end = mid;
+      } else if (match > 0) {
+        start = mid;
+      }
 
-    if (res === 0) {
-      found.push(suffixArray[mid]);
-    } else if (res > 0) {
-      l = mid + 1;
-    } else {
-      r = mid - 1;
+      console.log(matchedIndexes);
     }
   }
 
-  if (!Array.isArray(found) || !found.length) {
-    console.log('No Words Found');
+  if (matchedIndexes.length === 0) {
+    console.log(`No matches found for search term: ${pattern}`);
   }
 
-  return found;
+  return matchedIndexes;
 }
