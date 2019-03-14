@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFireUploadTask,
-  AngularFireStorage
-} from '@angular/fire/storage';
-import { Observable } from 'rxjs';
+import { AngularFireUploadTask, AngularFireStorage } from '@angular/fire/storage';
+import { Observable, of } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { switchMap } from 'rxjs/operators';
@@ -22,15 +19,19 @@ interface File {
 }
 interface Context {
   fid: string;
-  lid: string;
   cid: string;
   context_string: string;
   sentimental_value: number;
   date: number;
 }
 
+interface SearchTerm {
+  searchTerm: string;
+  Id: number;
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FileService {
   // Main task
@@ -41,6 +42,8 @@ export class FileService {
   fileQuery: Observable<any>;
   fileList: Array<any>;
   uploadError: string;
+  searchTerms: SearchTerm[] = [];
+  stids: number[] = [];
 
   constructor(
     private storage: AngularFireStorage,
@@ -55,9 +58,7 @@ export class FileService {
       .pipe(
         switchMap(user =>
           this.db
-            .collection('FYP_FILES', ref =>
-              ref.where('uid', '==', `${user.uid}`)
-            )
+            .collection('FYP_FILES', ref => ref.where('uid', '==', `${user.uid}`))
             .valueChanges()
         )
       );
@@ -67,13 +68,38 @@ export class FileService {
     return this.db.doc(`FYP_FILES/${fid}`).valueChanges();
   }
 
-  getFileContexts(fid: string): Observable<Array<Object>> {
+  getSearchTerms(): SearchTerm[] {
+    return this.searchTerms;
+  }
+
+  getSearchTermIds() {
+    return this.stids;
+  }
+
+  addSearchTerm(searchTerm: SearchTerm) {
+    this.stids.push(searchTerm.Id);
+    this.searchTerms.push(searchTerm);
+  }
+
+  removeSearchTerm(searchTermId: number) {
+    return this.searchTerms.splice(this.searchTerms.findIndex(st => st.Id === searchTermId), 1);
+  }
+
+  clearSearchTerms(): void {
+    const searchTermIds = this.getSearchTermIds();
+    searchTermIds.forEach(Id => {
+      this.removeSearchTerm(Id);
+    });
+    this.stids.length = 0;
+  }
+
+  getFileContexts(fid: string): Observable<Object[]> {
     return this.db
       .collection('FYP_CONTEXTS', ref => ref.where('fid', '==', `${fid}`))
       .valueChanges();
   }
 
-  getCids(fid: string): Array<string> {
+  getCids(fid: string): string[] {
     const cids = [];
     this.getFileContexts(fid).subscribe(contexts =>
       contexts.forEach((context: Context) => {
@@ -88,7 +114,8 @@ export class FileService {
     const fileName = fid + '.' + ext;
     const storageRef = firebase.storage().ref();
     this.deleteAllContexts(this.getCids(fid));
-    storageRef.child(`FYP_FILES/${userID}/${fileName}`)
+    storageRef
+      .child(`FYP_FILES/${userID}/${fileName}`)
       .delete()
       .then(() => {
         this.db
@@ -113,7 +140,7 @@ export class FileService {
       .catch(error => this.auth.handleError(error));
   }
 
-  deleteAllContexts(cids: Array<string>): void {
+  deleteAllContexts(cids: string[]): void {
     cids.forEach(cid => {
       return this.deleteContext(cid);
     });
@@ -165,16 +192,15 @@ export class FileService {
         file_type: file.type,
         path,
         size: file.size,
-        processed: 0
+        processed: 0,
+        searchTerms: this.getSearchTerms(),
       });
     }
+    this.clearSearchTerms();
   }
 
   // Determines if the upload task is active
   isActive(snapshot) {
-    return (
-      snapshot.state === 'running' &&
-      snapshot.bytesTransferred < snapshot.totalBytes
-    );
+    return snapshot.state === 'running' && snapshot.bytesTransferred < snapshot.totalBytes;
   }
 }

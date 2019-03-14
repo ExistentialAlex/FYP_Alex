@@ -17,7 +17,7 @@
         class="file-upload-btn"
         id="file-upload"
         type="file"
-        (change)="fs.startFileUpload($event.target.files)"
+        (change)="uploadFile($event.target.files)"
       />
       <label class=" btn btn-rounded" for="file-upload">Choose a file...</label>
       <p>{{fs.uploadError}}</p>

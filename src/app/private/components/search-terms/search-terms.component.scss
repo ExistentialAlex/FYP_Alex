@@ -1,0 +1,30 @@
+.selectedTerms{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 1em;
+    padding: 0;
+}
+
+.searchTermList {
+    margin-top: 0.5em!important;
+    margin-left: 0.5em!important;
+    margin-right: 0.5em!important;
+    padding-left: 0.5em;
+    border: rgba(0, 0, 0, 0.2) solid 1px;
+}
+
+.searchTerm{
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    margin: 0.2em;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: transparent;
+}
+
+.searchTermTextBox {
+    margin-top: 1rem;
+    padding: 0;
+}
+
+.addDeleteButtonContainer {
+    padding: 0;
+}

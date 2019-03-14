@@ -18,4 +18,8 @@ export class FileUploadComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  uploadFile(event: FileList) {
+    this.fs.startFileUpload(event);
+  }
 }

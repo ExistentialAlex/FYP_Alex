@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-10 ml-auto mr-auto selectedTerms">
+    <div class="row searchTermList" *ngIf="searchTerms.length > 0">
+      <div *ngFor="let searchTerm of searchTerms">
+        <button type="button" class="searchTerm" (click)="fs.removeSearchTerm(searchTerm.Id)">
+          {{ searchTerm.searchTerm }}
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form [formGroup]="searchTermsForm">
+          <div class="row align-items-center">
+            <div class="col-9 form-group searchTermTextBox">
+              <input class="form-control" type="text" placeholder="Enter a search term" formControlName="searchTerm" />
+            </div>
+            <div class="col-3 addDeleteButtonContainer">
+              <div class="row">
+                <div class="col-6">
+                  <button
+                    class="btn btn-rounded btn-default"
+                    type="button"
+                    (click)="addSearchTerm()"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button
+                    class="btn btn-rounded btn-default"
+                    type="button"
+                    (click)="fs.clearSearchTerms()"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
