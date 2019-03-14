@@ -1,26 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FileService } from 'src/app/common/services/file.service';
-import {
-  faFileWord,
-  faFile,
-  faFilePdf
-} from '@fortawesome/free-solid-svg-icons';
+import { faFileWord, faFile, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { LocationService } from 'src/app/common/services/location.service';
+
+interface Context {
+  searchTerm: string;
+  context_string: string;
+  fid: string;
+  sentimental_value: number;
+  stid: string;
+  cid: string;
+}
+
+interface ContextCollection {
+  searchTerm: string;
+  stid: string;
+  contexts: Context[];
+}
 
 @Component({
   selector: 'app-file-details',
   templateUrl: './file-details.component.html',
-  styleUrls: ['./file-details.component.scss']
+  styleUrls: ['./file-details.component.scss'],
 })
 export class FileDetailsComponent implements OnInit {
   // Variables
   file: Object;
   contexts: Array<any>;
-  townsTemp: Array<any>;
-  citiesTemp: Array<any>;
-  townsFinal: Array<any>;
-  citiesFinal: Array<any>;
+  contextCollections: ContextCollection[];
 
   // Icon generation
   faFileWord = faFileWord;
@@ -36,8 +44,6 @@ export class FileDetailsComponent implements OnInit {
   ngOnInit() {
     // Initialise each variable, otherwise errors are produced
     this.file = {};
-    this.townsTemp = [];
-    this.citiesTemp = [];
     // Retrieve the file data
     this.getFileData();
   }
@@ -58,67 +64,41 @@ export class FileDetailsComponent implements OnInit {
   // Retrieves the array of contexts for a file from the db
   getContexts(fid) {
     this.fs.getFileContexts(fid).subscribe(contexts => {
-      this.getLocations(contexts);
+      this.CreateContextCollections(contexts as Context[]);
     });
   }
 
-  // Retrieves the location for each context in a file
-  getLocations(contexts) {
-    const waitFor = contexts.length;
-    let resolved = 0;
-    // Loop through each context and get the location of the context
-    for (let i = 0; i < contexts.length; i++) {
-      this.ls.getLocation(contexts[i].lid).subscribe(location => {
-        this.sortLocations(location);
-        resolved++;
-        // Wait for all locations to be retrieved before appending contexts
-        if (resolved === waitFor) {
-          this.appendContexts(contexts);
-        }
-      });
-    }
-  }
-
-  // Sort the locations into towns and cities
-  sortLocations(location) {
-    if (location.location_type === 'town') {
-      this.townsTemp.push(location);
-    } else if (location.location_type === 'city') {
-      this.citiesTemp.push(location);
-    }
-  }
-
-  // Add the contexts to the towns and cities
-  appendContexts(contexts) {
-    // Filter out duplicate towns and cities
-    const towns = this.townsTemp.filter(
-      (town, index, self) => self.findIndex(t => t.lid === town.lid) === index
-    );
-    const cities = this.citiesTemp.filter(
-      (city, index, self) => self.findIndex(c => c.lid === city.lid) === index
-    );
-
-    towns.forEach(element => {
-      element.contexts = [];
-      for (let i = 0; i < contexts.length; i++) {
-        if (contexts[i].lid === element.lid) {
-          element.contexts.push(contexts[i]);
+  CreateContextCollections(contexts: Context[]) {
+    const contextCollections: ContextCollection[] = [];
+    this.getSearchTerms(contexts).forEach(searchTermString => {
+      contextCollections.push({ searchTerm: searchTermString, stid: '', contexts: [] });
+    });
+    contextCollections.forEach(contextCollection => {
+      for (const context of contexts) {
+        if (context.searchTerm === contextCollection.searchTerm) {
+          contextCollection.contexts.push(context);
+          contextCollection.stid = context.stid;
         }
       }
     });
-    cities.forEach(element => {
-      element.contexts = [];
-      for (let i = 0; i < contexts.length; i++) {
-        if (contexts[i].lid === element.lid) {
-          element.contexts.push(contexts[i]);
-        }
-      }
-    });
-    this.townsFinal = towns;
-    this.citiesFinal = cities;
+    this.contextCollections = contextCollections;
   }
 
-  deleteContext(cid) {
+  getSearchTerms(contexts: Context[]) {
+    const flags = [];
+    const output = [];
+    const l = contexts.length;
+    for (let i = 0; i < l; i++) {
+      if (flags[contexts[i].searchTerm]) {
+        continue;
+      }
+      flags[contexts[i].searchTerm] = true;
+      output.push(contexts[i].searchTerm);
+    }
+    return output;
+  }
+
+  deleteContext(cid: string) {
     this.fs.deleteContext(cid);
   }
 }

@@ -25,13 +25,7 @@
     <div style="overflow-y:auto;">
       <div class="row locations-card">
         <div class="col-12">
-          <div *ngIf="citiesFinal"><app-city-list></app-city-list></div>
-        </div>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="col-12">
-          <div *ngIf="townsFinal"><app-town-list></app-town-list></div>
+          <div *ngIf="contextCollections"><app-contexts></app-contexts></div>
         </div>
       </div>
     </div>

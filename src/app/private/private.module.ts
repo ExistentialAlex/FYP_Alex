@@ -16,11 +16,11 @@ import { FilePageComponent } from './pages/file-page/file-page.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FileDetailsComponent } from './components/file-details/file-details.component';
-import { CityListComponent } from './components/city-list/city-list.component';
-import { TownListComponent } from './components/town-list/town-list.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserDetailsFormComponent } from './components/user-details-form/user-details-form.component';
 import { FileUploadPageComponent } from './pages/file-upload-page/file-upload-page.component';
+import { SearchTermsComponent } from './components/search-terms/search-terms.component';
+import { ContextsComponent } from './components/contexts/contexts.component';
 
 const routes: Route[] = [
   {
@@ -65,14 +65,15 @@ const routes: Route[] = [
     DragndropDirective,
     FileSizePipe,
     FileDetailsComponent,
-    CityListComponent,
-    TownListComponent,
     UserDetailsFormComponent,
-    FileUploadPageComponent
+    FileUploadPageComponent,
+    SearchTermsComponent,
+    ContextsComponent
   ],
   providers: [
     AuthService,
-    NotifyService
+    NotifyService,
+    SearchTermsComponent
   ]
 })
 export class PrivateModule { }

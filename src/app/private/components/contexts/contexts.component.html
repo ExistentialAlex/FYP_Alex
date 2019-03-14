@@ -1,5 +1,5 @@
-<h1>Cities</h1>
-<div *ngFor="let city of cities">
+<h1>Search Terms</h1>
+<div *ngFor="let contextCollection of fd.contextCollections">
   <div class="row">
     <div class="col-12">
       <div class="row align-items-center">
@@ -7,40 +7,26 @@
           <div class="location-title location-title-text">
             <a
               class="loc-link"
-              routerLink="/private/locationViewer/{{city.lid}}"
+              routerLink="/private/locationViewer/{{contextCollection.searchTerm}}"
             >
-              {{ city.location_name }}
+              {{ contextCollection.searchTerm }}
             </a>
           </div>
           <div class="v-rule location-title"></div>
-          <div class="location-title">
-            <span
-              class="sentimentValue btn btn-rounded location-title-text"
-              [ngClass]="{
-                positive: city.sentimental_value > 0,
-                negative: city.sentimental_value < 0,
-                neutral: city.sentimental_value == 0
-              }"
-            >
-              {{ city.sentimental_value }}
-            </span>
-          </div>
-
-          <div class="v-rule location-title"></div>
           <div class="location-title location-title-text">
-            Contexts: {{ city.contexts.length }}
+            Contexts: {{ contextCollection.contexts.length }}
           </div>
         </div>
         <div class="col-4">
           <button
             class="hamburger hamburger--spin"
-            [attr.id]="'hamburger' + city.lid"
+            [attr.id]="'hamburger' + contextCollection.stid"
             type="button"
             data-toggle="collapse"
-            [attr.data-target]="'#collapse' + city.lid"
+            [attr.data-target]="'#collapse' + contextCollection.stid"
             aria-expanded="false"
             aria-controls="collapse"
-            (click)="cs.toggleHamburger(city.lid)"
+            (click)="cs.toggleHamburger(contextCollection.stid)"
           >
             <span class="hamburger-box">
               <span class="hamburger-inner"></span>
@@ -49,8 +35,8 @@
           </button>
         </div>
       </div>
-      <div class="collapse" id="collapse{{city.lid}}">
-        <div *ngFor="let context of city.contexts">
+      <div class="collapse" id="collapse{{contextCollection.stid}}">
+        <div *ngFor="let context of contextCollection.contexts">
           <div class="card context-card">
             <div class="row align-items-center">
               <div class="col-10">
