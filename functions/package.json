@@ -14,6 +14,7 @@
     "@google-cloud/firestore": "^1.0.1",
     "firebase-admin": "^6.0.0",
     "firebase-functions": "^2.2.0",
+    "sentiment": "^5.0.1",
     "textract": "^2.4.0",
     "word-extractor": "^0.1.4"
   },

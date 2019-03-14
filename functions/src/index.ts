@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin';
 import * as path from 'path';
 import * as WordExtractor from 'word-extractor';
 import * as textract from 'textract';
+import * as sentiment from 'sentiment';
 import suffixArray from './suffixArray';
 
 // interface Location {
@@ -12,11 +13,18 @@ import suffixArray from './suffixArray';
 //   sentimental_value: number;
 // }
 
-// interface Context {
-//   lid: string;
-//   context_string: string;
-//   fid: string;
-// }
+interface Context {
+  stid: string;
+  cid: string;
+  context_string: string;
+  fid: string;
+  sentimental_value: number;
+}
+
+interface SearchTerm {
+  searchTerm: string;
+  Id: number;
+}
 
 export const processFile = functions.storage.object().onFinalize(async file => {
   const serviceAccount = require(__dirname + '/../config/serviceAccount.json');
@@ -42,19 +50,20 @@ export const processFile = functions.storage.object().onFinalize(async file => {
     console.log('File Saved');
     const text = await getText(_path, fileExt);
     console.log(`Text: ${text}`);
-    const searchTerms = await getSearchTerms();
+    const searchDocument = await getSearchTerms(fileName);
+    const searchTerms: SearchTerm[] = searchDocument.searchTerms;
     console.log(`Search Terms: ${searchTerms}`);
     console.log('Creating Suffix Array');
     const suffix_array = suffixArray(text);
-    for (const searchDoc of searchTerms) {
-      const searchTerm = searchDoc.location_name.toLowerCase();
+    for (const searchObj of searchTerms) {
+      const searchTerm = searchObj.searchTerm.toLowerCase();
       console.log(searchTerm);
       const matchedIndexes = search(text.toLowerCase(), searchTerm, suffix_array);
       console.log(matchedIndexes);
       console.log(matchedIndexes.length);
       if (matchedIndexes.length > 0) {
         console.log('Creating Contexts');
-        const contexts = createContexts(matchedIndexes, searchDoc, text, fileName);
+        const contexts: Context[] = createContexts(matchedIndexes, searchTerm, text, fileName);
         console.log(contexts);
         const promises = [];
         if (contexts.length > 0) {
@@ -62,8 +71,8 @@ export const processFile = functions.storage.object().onFinalize(async file => {
           for (const context of contexts) {
             const p = admin
               .firestore()
-              .collection('FYP_CONTEXTS')
-              .add(context);
+              .doc(`FYP_CONTEXTS/${context.cid}`)
+              .set(context);
             promises.push(p);
           }
           await Promise.all(promises);
@@ -118,13 +127,13 @@ async function getText(_path: string, fileExt: string) {
   return text;
 }
 
-async function getSearchTerms(): Promise<FirebaseFirestore.DocumentData[]> {
+async function getSearchTerms(fileName: string): Promise<FirebaseFirestore.DocumentData> {
   try {
     const snapshot = await admin
       .firestore()
-      .collection('FYP_LOCATIONS')
+      .doc(`FYP_FILES/${fileName}`)
       .get();
-    return snapshot.docs.map(doc => doc.data());
+    return snapshot.data();
   } catch (e) {
     console.error(e);
     return [];
@@ -146,15 +155,15 @@ function search(text: string, search_term: string, suffix_array: number[]) {
 
 function createContexts(
   matchedIndexes: number[],
-  searchDoc: FirebaseFirestore.DocumentData,
+  searchTerm: string,
   text: string,
   fileName: string
-) {
+): Context[] {
   const contexts = [];
-  const searchTerm = searchDoc.location_name.toLowerCase();
+  let contextCounter = 1;
   for (const index of matchedIndexes) {
-    let left = index - 25;
-    let right = index + searchTerm.length + 25;
+    let left: number = index - 25;
+    let right: number = index + searchTerm.length + 25;
     if (left < 0) {
       left = 0;
     }
@@ -162,15 +171,28 @@ function createContexts(
       right = text.length;
     }
     const context = text.substring(left, right);
+    const sentimentalValue: number = analyse(context);
+    const stid = `${fileName}_${searchTerm}`.replace(/\s/g, '');
+    const cid = `${stid}_${contextCounter}`;
     contexts.push({
-      lid: searchDoc.lid,
+      searchTerm: searchTerm,
       context_string: context,
       fid: fileName,
+      cid: cid,
+      stid: stid,
+      sentimental_value: sentimentalValue.toFixed(3)
     });
+    contextCounter++;
   }
   return contexts;
 }
 
+function analyse(context: string): number {
+  const sentimental = new sentiment();
+  const result = sentimental.analyze(context);
+  console.log(result);
+  return result.comparative;
+}
 // function search(text: string, searchTerm: string, suffix_array: number[]) {
 //   console.log(`Beginning search for: ${searchTerm}`);
 //   let start = 0;
