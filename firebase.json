@@ -7,7 +7,7 @@
     "source": "functions"
   },
   "hosting": {
-    "public": "public",
+    "public": "dist/FYP-Alex-v1",
     "ignore": [
       "firebase.json",
       "**/.*",
