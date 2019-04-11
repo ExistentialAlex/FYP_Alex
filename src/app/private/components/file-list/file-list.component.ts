@@ -23,6 +23,9 @@ export class FileListComponent implements OnInit {
     this.fileList = this.getUsersFiles();
   }
 
+  /**
+   * Retrieves the files uploaded by the currently signed-in user.
+   */
   getUsersFiles() {
     this.fs.getUserFiles().subscribe(userFiles => {
       this.fileList = userFiles;

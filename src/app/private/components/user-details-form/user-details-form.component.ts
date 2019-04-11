@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService } from 'src/app/common/services/location.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/common/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-details-form',
@@ -15,13 +15,13 @@ export class UserDetailsFormComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private ls: LocationService,
     private fb: FormBuilder
   ) {}
 
   userForm: FormGroup;
 
   ngOnInit() {
+    // Initialises the User Form with the first_name, last_name, gender and location fields.
     this.userForm = this.fb.group({
       first_name: ['', [Validators.required]],
       last_name: ['', [Validators.required]],
@@ -35,41 +35,50 @@ export class UserDetailsFormComponent implements OnInit {
       { id: 4, gender: 'Prefer Not to Say' }
     ];
     this.user = {};
-    this.locations = [];
-    this.getLocations();
     this.getUser();
   }
 
-  getUser() {
-    this.auth.getUserData().subscribe((user: Object) => {
+  /**
+   * Gets the user object from Auth Service and makes it available in the User Details Component.
+   *
+   * @returns Subscription to the user object.
+   */
+  getUser(): Subscription {
+    return this.auth.getUserData().subscribe((user: Object) => {
       this.user = user;
     });
   }
 
-  getLocations() {
-    this.ls.getAllLocations().subscribe((locations: Array<Location>) => {
-      this.locations = locations;
-    });
-  }
-
+  /**
+   * Gets the value from the first_name field in the User Details Form
+   */
   get first_name() {
     return this.userForm.get('first_name');
   }
+
+  /**
+   * Gets the value from the last_name field in the User Details Form
+   */
   get last_name() {
     return this.userForm.get('last_name');
   }
+
+  /**
+   * Gets the value from the gender field in the User Details Form
+   */
   get gender() {
     return this.userForm.get('gender');
   }
-  get location() {
-    return this.userForm.get('location');
-  }
 
+  /**
+   * Updates the users details in Firestore with details in the User Details Form.
+   *
+   * @param user - User to update the details of.
+   */
   updateUserDetails(user) {
     let first_name_up = this.first_name.value;
     let last_name_up = this.last_name.value;
     let gender_up = this.gender.value;
-    let location_up = this.location.value;
     if (first_name_up === '') {
       if (user.first_name != null) {
         first_name_up = user.first_name;
@@ -85,17 +94,11 @@ export class UserDetailsFormComponent implements OnInit {
         gender_up = user.gender;
       }
     }
-    if (location_up === '') {
-      if (user.location != null) {
-        location_up = user.location;
-      }
-    }
 
     return this.auth.updateUser(user, {
       first_name: first_name_up,
       last_name: last_name_up,
-      gender: gender_up,
-      location: location_up
+      gender: gender_up
     });
   }
 }

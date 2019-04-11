@@ -26,10 +26,16 @@ export class SearchTermsComponent implements OnInit {
     this.searchTerms = this.fs.getSearchTerms();
   }
 
+  /**
+   * Gets the value from the searchTerm field in the Search Terms Form.
+   */
   get SearchTerm() {
     return this.searchTermsForm.get('searchTerm');
   }
 
+  /**
+   * Adds a search term to the searchTerm array in the File Service.
+   */
   addSearchTerm() {
     let id: number;
     if (this.searchTerms.length > 0) {
@@ -43,5 +49,6 @@ export class SearchTermsComponent implements OnInit {
         Id: id,
       });
     }
+    this.searchTermsForm.reset();
   }
 }

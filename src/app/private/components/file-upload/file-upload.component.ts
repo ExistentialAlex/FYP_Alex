@@ -19,6 +19,11 @@ export class FileUploadComponent implements OnInit {
 
   ngOnInit() {}
 
+  /**
+   * Calls startFileUpload() which uploads the users files to Firebase.
+   *
+   * @param event - File List to upload to Firebase.
+   */
   uploadFile(event: FileList) {
     this.fs.startFileUpload(event);
   }

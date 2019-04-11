@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Creates the login form with email and password validators.
     this.loginForm = this.fb.group({
       'email': ['', [
         Validators.required,
@@ -29,9 +30,19 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Gets the value from the Email field in the Login Form.
+   */
   get email() {return this.loginForm.get('email'); }
+
+  /**
+   * Gets the value from the Password field in the Login Form.
+   */
   get password() {return this.loginForm.get('password'); }
 
+  /**
+   * Pass the values from the login form to the Auth.login()
+   */
   login() {
     this.auth.login(this.email.value, this.password.value);
   }

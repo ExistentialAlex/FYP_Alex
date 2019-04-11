@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FileService } from 'src/app/common/services/file.service';
 import { faFileWord, faFile, faFilePdf } from '@fortawesome/free-solid-svg-icons';
-import { LocationService } from 'src/app/common/services/location.service';
 
 interface Context {
   searchTerm: string;
@@ -37,8 +36,7 @@ export class FileDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fs: FileService,
-    private ls: LocationService
+    private fs: FileService
   ) {}
 
   ngOnInit() {
@@ -48,7 +46,9 @@ export class FileDetailsComponent implements OnInit {
     this.getFileData();
   }
 
-  // Retrieves the file data to be displayed in the FileDetailComponent
+  /**
+   * Retrieves the file data to be displayed in the FileDetailComponent
+   */
   getFileData() {
     // Retrieves the file ID from the URL
     this.route.params.subscribe(params => {
@@ -61,13 +61,23 @@ export class FileDetailsComponent implements OnInit {
     });
   }
 
-  // Retrieves the array of contexts for a file from the db
-  getContexts(fid) {
-    this.fs.getFileContexts(fid).subscribe(contexts => {
+  /**
+   * Retrieves the array of contexts for a file from the db
+   *
+   * @param fid - File ID for the file to retrieve the contexts from.
+   */
+  getContexts(fid: string) {
+    return this.fs.getFileContexts(fid).subscribe(contexts => {
       this.CreateContextCollections(contexts as Context[]);
     });
   }
 
+  /**
+   * Create context collections for the array of contexts.
+   * Appends the contexts to the correct search term.
+   *
+   * @param contexts - Array of contexts to create collections from.
+   */
   CreateContextCollections(contexts: Context[]) {
     const contextCollections: ContextCollection[] = [];
     this.getSearchTerms(contexts).forEach(searchTermString => {
@@ -84,11 +94,16 @@ export class FileDetailsComponent implements OnInit {
     this.contextCollections = contextCollections;
   }
 
+  /**
+   * Retrieves all unique search terms from the contexts.
+   *
+   * @param contexts - The Contexts to retrieve the search terms from.
+   */
   getSearchTerms(contexts: Context[]) {
     const flags = [];
     const output = [];
-    const l = contexts.length;
-    for (let i = 0; i < l; i++) {
+    const length = contexts.length;
+    for (let i = 0; i < length; i++) {
       if (flags[contexts[i].searchTerm]) {
         continue;
       }
@@ -98,6 +113,11 @@ export class FileDetailsComponent implements OnInit {
     return output;
   }
 
+  /**
+   * Deletes a context from a file.
+   *
+   * @param cid - Context ID of the context to delete.
+   */
   deleteContext(cid: string) {
     this.fs.deleteContext(cid);
   }
