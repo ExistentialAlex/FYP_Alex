@@ -2,3 +2,4 @@ node_modules/
 environment.ts
 dist/
 public/
+hosting*
