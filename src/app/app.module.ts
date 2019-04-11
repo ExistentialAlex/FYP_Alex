@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CoreModule } from './common/modules/core/core.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AppComponent } from './app.component';
 import { AngularFireModule } from '@angular/fire';
@@ -30,7 +29,6 @@ import { AuthGuard } from './common/guards/auth.guard';
     FormsModule,
     RouterModule,
     RouterModule.forRoot(routes),
-    CoreModule,
     FontAwesomeModule
   ],
   providers: [
