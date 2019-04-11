@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12 col-md-6 form-group">
+        <div class="col-12 col-md-6 form-group ml-auto mr-auto">
           <label for="gender">Gender</label>
           <select
             type="gender"
@@ -34,21 +34,6 @@
             </option>
             <option *ngFor="let gender of genders" [value]="gender.gender">
               {{ gender.gender }}
-            </option>
-          </select>
-        </div>
-        <div class="col-12 col-md-6 form-group">
-          <label for="location">Location</label>
-          <select
-            type="location"
-            formControlName="location"
-            class="form-control input_rounded"
-          >
-            <option value="" disabled selected *ngIf="user.location">
-              {{ user.location }}
-            </option>
-            <option *ngFor="let location of locations" [value]="location.country_name">
-              {{ location.country_name }}
             </option>
           </select>
         </div>
