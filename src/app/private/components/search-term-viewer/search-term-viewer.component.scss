@@ -1,0 +1,39 @@
+@import '../../../../sass/variables';
+.searchTermContainer {
+  box-shadow: $shadow;
+}
+
+.searchTermTitle {
+  padding-top: 1em;
+  font-weight: 600;
+  font-size: 2em;
+}
+
+.sentimental-value {
+}
+
+.component-container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.positive {
+  background-color: #41c300;
+}
+
+.negative {
+  background-color: #f44336;
+}
+
+.neutral {
+  background-color: #ffeb3b;
+}
+
+.searchTermImage {
+  height: 20em;
+  width: 100%;
+}
+
+.searchTermImageContainer {
+  padding: 0;
+}

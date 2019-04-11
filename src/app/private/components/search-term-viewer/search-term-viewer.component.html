@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-12 col-md-8 ml-auto mr-auto component-container">
+        <div *ngIf="searchTermImage">
+          <div class="row">
+            <div class="col-12 searchTermImageContainer">
+              <img class="searchTermImage" [src]="searchTermImage" />
+            </div>
+          </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-6">
+              <div class="searchTermTitle">
+                {{ searchTerm }}
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                {{ searchTermSentiment }}
+              </div>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-10 ml-auto mr-auto">
+            <hr />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="" *ngFor="let context of contexts">
+              <div class="row align-items-center">
+                <div class="col-8">
+                  {{ context.context_string }}
+                </div>
+                <div class="col-4">
+                  <div
+                    class="btn btn-rounded sentimental-value"
+                    [ngClass]="{
+                      positive: context.sentimental_value > 0,
+                      negative: context.sentimental_value < 0,
+                      neutral: context.sentimental_value == 0
+                    }"
+                  >
+                    {{ context.sentimental_value }}
+                  </div>
+                </div>
+              </div>
+              <hr />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
